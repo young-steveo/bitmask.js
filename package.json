@@ -1,8 +1,8 @@
 {
-  "name": "xxx",
+  "name": "bitmask.js",
   "version": "0.0.1",
   "author": "Stephen Young <young.steveo@gmail.com>",
-  "description": "",
+  "description": "Quick and painless bitmasks for controlling application state.",
   "contributors": [
     {
       "name": "Stephen Young",

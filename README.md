@@ -1,2 +1,2 @@
-Super Awesome Project Readme.md
-===============================
+Bitmask.js
+==========

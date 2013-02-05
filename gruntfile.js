@@ -14,9 +14,8 @@ module.exports = function(grunt) {
 
         sources : [
             'src/intro.js',
-
-            // add'l packages
-
+            'src/bitmask.js',
+            'src/export.js',
             'src/outro.js'
         ],
         pkg : grunt.file.readJSON('package.json'),
