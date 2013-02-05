@@ -1,5 +1,5 @@
 {
-  "name": "bitmask.js",
+  "name": "bitmask",
   "version": "0.0.1",
   "author": "Stephen Young <young.steveo@gmail.com>",
   "description": "Quick and painless bitmasks for controlling application state.",
