@@ -50,8 +50,9 @@
      * @param Array|String [, String...] list
      * @return Boolean
      */
-    Bitmask.prototype.any = function() {
-
+    Bitmask.prototype.any = function(list) {
+        list = toString.call(list) === '[object Array]' ? list : slice.call(arguments);
+        return !!(register.apply(this, list) & this.mask).toString(2).replace(/0/g, '').length;
     };
 
     /**

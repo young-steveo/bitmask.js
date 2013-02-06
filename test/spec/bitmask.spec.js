@@ -58,6 +58,51 @@
             });
         });
 
+        describe('any', function(){
+            it('returns a boolean', function() {
+                var mask;
+
+                mask = new Bitmask();
+                mask.set('a', 'b');
+                expect(mask.any('a')).toBe(true);
+            });
+            it('can take an array', function() {
+                var mask;
+
+                mask = new Bitmask();
+                mask.set('a', 'b');
+                expect(mask.any(['a'])).toBe(true);
+            });
+            it('accepts two params that match and returns true', function() {
+                var mask;
+
+                mask = new Bitmask();
+                mask.set('a', 'b');
+                expect(mask.any('a', 'b')).toBe(true);
+            });
+            it('accepts two tags in an array that match and returns true', function() {
+                var mask;
+
+                mask = new Bitmask();
+                mask.set('a', 'b');
+                expect(mask.any(['a', 'b'])).toBe(true);
+            });
+            it('accepts two params that do not all match and returns true', function() {
+                var mask;
+
+                mask = new Bitmask();
+                mask.set('a', 'b');
+                expect(mask.any('a', 'c')).toBe(true);
+            });
+            it('accepts two tags in an array that do not all match and returns true', function() {
+                var mask;
+
+                mask = new Bitmask();
+                mask.set('a', 'b');
+                expect(mask.any(['a', 'c'])).toBe(true);
+            });
+        });
+
         describe('get', function(){
             it('returns a number', function(){
                 expect(Bitmask.get('someTag')).toEqual(jasmine.any(Number));
