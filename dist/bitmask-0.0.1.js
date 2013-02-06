@@ -69,7 +69,7 @@
      * @param String [, String ...]
      * @return Number
      */
-    Bitmask.prototype.get = function() {
+    Bitmask.get = function() {
         return register.call(this, arguments);
     };
 
