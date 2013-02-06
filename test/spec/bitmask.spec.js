@@ -7,7 +7,7 @@
 
                 mask = new Bitmask();
                 mask.set('one', 'two', 'three');
-                list = mask.inspect();
+                list = Bitmask.inspect();
                 expect(list.one).toBeDefined();
                 expect(list.two).toBeDefined();
                 expect(list.three).toBeDefined();

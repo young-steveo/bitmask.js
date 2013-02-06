@@ -47,7 +47,7 @@
         list = toString.call(list) === '[object Array]' ? list : slice.call(arguments);
         count = list.length;
 
-        return (register.apply(this, list) & this.mask).toString(2).replace(/0/g,'').length === count;
+        return (register.apply(this, list) & this.mask).toString(2).replace(/0/g, '').length === count;
     };
 
     /**
@@ -77,7 +77,7 @@
      * Returns a copy of the list (not a reference)
      * @return Object
      */
-    Bitmask.prototype.inspect = function(){
+    Bitmask.inspect = function(){
         var tag, obj;
 
         obj = {};
