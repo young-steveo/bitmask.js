@@ -10,7 +10,7 @@
      * [Bitmask description]
      */
     Bitmask = function(){
-        this.mask = 0;
+        this.m = 0;
     };
 
     /**
@@ -20,7 +20,7 @@
      * @return Number
      */
     Bitmask.prototype.set = function() {
-        return this.mask = register.apply(this, arguments);
+        return this.m = register.apply(this, arguments);
     };
 
     /**
@@ -38,7 +38,7 @@
         list = toString.call(list) === '[object Array]' ? list : slice.call(arguments);
         count = list.length;
 
-        return (register.apply(this, list) & this.mask).toString(2).replace(/0/g, '').length === count;
+        return (register.apply(this, list) & this.m).toString(2).replace(/0/g, '').length === count;
     };
 
     /**
@@ -52,7 +52,7 @@
      */
     Bitmask.prototype.any = function(list) {
         list = toString.call(list) === '[object Array]' ? list : slice.call(arguments);
-        return !!(register.apply(this, list) & this.mask).toString(2).replace(/0/g, '').length;
+        return !!(register.apply(this, list) & this.m).toString(2).replace(/0/g, '').length;
     };
 
     /**
