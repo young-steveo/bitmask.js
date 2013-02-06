@@ -61,7 +61,7 @@
      * @return Number
      */
     Bitmask.get = function() {
-        return register.call(this, arguments);
+        return register.apply(null, arguments);
     };
 
     /**

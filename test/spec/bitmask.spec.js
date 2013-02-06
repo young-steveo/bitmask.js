@@ -1,4 +1,4 @@
-(function(describe, it, expect, Bitmask, undefined) {
+(function(describe, it, expect, jasmine, Bitmask, undefined) {
     "use strict";
     describe('Bitmask', function() {
         describe('set', function() {
@@ -57,5 +57,15 @@
                 expect(mask.all(['one', 'two'])).toBe(false);
             });
         });
+
+        describe('get', function(){
+            it('returns a number', function(){
+                expect(Bitmask.get('someTag')).toEqual(jasmine.any(Number));
+            });
+            it('registers tags', function(){
+                Bitmask.get('someNewTag');
+                expect(Bitmask.inspect().someNewTag).toBeDefined();
+            });
+        });
     });
-}(describe, it, expect, Bitmask));
+}(describe, it, expect, jasmine, Bitmask));
