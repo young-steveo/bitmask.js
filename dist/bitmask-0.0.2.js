@@ -1,5 +1,5 @@
 /**
- * bitmask v0.0.2 - 2013-02-05
+ * bitmask v0.0.2 - 2013-02-06
  * Quick and painless bitmasks for controlling application state.
  *
  * Copyright (c) 2013 Stephen Young <young.steveo@gmail.com>
@@ -7,19 +7,18 @@
  */
 ;(function(undefined){
     "use strict";
-    var Bitmask, tags, index, slice, toString, pow, register;
+    var Bitmask, tags, index, slice, pow, register, makeArray, getOnesLength;
 
     index = 0;
     tags = {};
     slice = Array.prototype.slice;
-    toString = Object.prototype.toString;
     pow = Math.pow;
 
     /**
      * [Bitmask description]
      */
     Bitmask = function(){
-        this.mask = 0;
+        this.m = 0;
     };
 
     /**
@@ -29,7 +28,7 @@
      * @return Number
      */
     Bitmask.prototype.set = function() {
-        return this.mask = register.apply(this, arguments);
+        return this.m = register.apply(this, arguments);
     };
 
     /**
@@ -44,10 +43,10 @@
     Bitmask.prototype.isset = Bitmask.prototype.all = function(list) {
         var count;
 
-        list = toString.call(list) === '[object Array]' ? list : slice.call(arguments);
+        list = makeArray.apply(this, arguments);
         count = list.length;
 
-        return (register.apply(this, list) & this.mask).toString(2).replace(/0/g, '').length === count;
+        return getOnesLength.call(this, list) === count;
     };
 
     /**
@@ -59,9 +58,8 @@
      * @param Array|String [, String...] list
      * @return Boolean
      */
-    Bitmask.prototype.any = function(list) {
-        list = toString.call(list) === '[object Array]' ? list : slice.call(arguments);
-        return !!(register.apply(this, list) & this.mask).toString(2).replace(/0/g, '').length;
+    Bitmask.prototype.any = function() {
+        return !!getOnesLength.call(this, makeArray.apply(this, arguments));
     };
 
     /**
@@ -108,6 +106,17 @@
             sum += typeof tags[tag] === 'undefined' ? ((tags[tag] = pow(2, index++))) : tags[tag];
         }
         return sum;
+    };
+
+    /**
+     * Some common internal logic
+     */
+    makeArray = function(list) {
+        return Object.prototype.toString.call(list) === '[object Array]' ? list : slice.call(arguments);
+    };
+
+    getOnesLength = function(list) {
+        return (register.apply(this, list) & this.m).toString(2).replace(/0/g, '').length;
     };
     if (typeof exports !== 'undefined' && typeof module !== 'undefined' && module.exports) {
         exports = module.exports = Bitmask;
