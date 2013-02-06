@@ -13,6 +13,7 @@
                 expect(list.three).toBeDefined();
             });
         });
+
         describe('all', function() {
             it('returns a boolean', function() {
                 var mask;
@@ -55,6 +56,16 @@
                 mask = new Bitmask();
                 mask.set('one', 'three');
                 expect(mask.all(['one', 'two'])).toBe(false);
+            });
+        });
+
+        describe('isset', function() {
+            it('is an alias of any', function() {
+                var mask;
+
+                mask = new Bitmask();
+                mask.set('one', 'three');
+                expect(mask.isset('one')).toBe(true);
             });
         });
 

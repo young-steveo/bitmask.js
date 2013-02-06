@@ -1,5 +1,5 @@
 /**
- * bitmask v0.0.1 - 2013-02-05
+ * bitmask v0.0.2 - 2013-02-05
  * Quick and painless bitmasks for controlling application state.
  *
  * Copyright (c) 2013 Stephen Young <young.steveo@gmail.com>
@@ -41,7 +41,7 @@
      * @param Array|String [, String...] list
      * @return Boolean
      */
-    Bitmask.prototype.all = function(list) {
+    Bitmask.prototype.isset = Bitmask.prototype.all = function(list) {
         var count;
 
         list = toString.call(list) === '[object Array]' ? list : slice.call(arguments);

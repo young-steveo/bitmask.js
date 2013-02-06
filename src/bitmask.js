@@ -32,7 +32,7 @@
      * @param Array|String [, String...] list
      * @return Boolean
      */
-    Bitmask.prototype.all = function(list) {
+    Bitmask.prototype.isset = Bitmask.prototype.all = function(list) {
         var count;
 
         list = toString.call(list) === '[object Array]' ? list : slice.call(arguments);
