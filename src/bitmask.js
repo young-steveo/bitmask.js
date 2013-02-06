@@ -1,4 +1,4 @@
-    var Bitmask, tags, index, slice, pow, register, makeArray, getOnesLength;
+    var Bitmask, tags, index, slice, pow, register, makeArray, getOnesLength, proto;
 
     index = 0;
     tags = {};
@@ -6,11 +6,16 @@
     pow = Math.pow;
 
     /**
-     * [Bitmask description]
+     * Constructor.
      */
     Bitmask = function(){
         this.m = 0;
     };
+
+    /**
+     * Shorthand for the Bitmask prototype.
+     */
+    proto = Bitmask.prototype;
 
     /**
      * Sets the Bitmask and returns it.
@@ -18,7 +23,7 @@
      * @param String [, String ...]
      * @return Number
      */
-    Bitmask.prototype.set = function() {
+    proto.set = function() {
         return this.m = register.apply(this, arguments);
     };
 
@@ -31,7 +36,7 @@
      * @param Array|String [, String...] list
      * @return Boolean
      */
-    Bitmask.prototype.isset = Bitmask.prototype.all = function(list) {
+    proto.isset = proto.all = function(list) {
         var count;
 
         list = makeArray.apply(this, arguments);
@@ -49,7 +54,7 @@
      * @param Array|String [, String...] list
      * @return Boolean
      */
-    Bitmask.prototype.any = function() {
+    proto.any = function() {
         return !!getOnesLength.call(this, makeArray.apply(this, arguments));
     };
 
