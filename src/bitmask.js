@@ -240,7 +240,7 @@
         },
 
         any : function(value) {
-            return (value & this.m).toString(2).replace(/0/g, '').length > 0;
+            return (value & this.m).toString(2).indexOf('1') !== -1;
         },
         match : function(value) {
             return value === this.m;
