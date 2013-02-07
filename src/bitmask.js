@@ -1,4 +1,4 @@
-    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split, strip,
+    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split, strip, filters,
         objProto, numToString, objToString, countBits, bitProto, namespace;
 
     indexes = {};
@@ -53,8 +53,8 @@
     };
 
     /**
-     * Takes an array of tags, multiple tags as params, or a bitmask value and returns a boolean
-     * indicating whether all of the tags have been set.
+     * Takes an array of tags or multiple tags as params and returns a boolean indicating whether
+     * all of the tags have been set.
      *
      * All tags must be previously set for this method to return true.
      *
@@ -62,17 +62,11 @@
      * @return Boolean
      */
     bitProto.all = function(list) {
-        var count, result;
+        var count;
 
-        if (typeof list === 'number') {
-            count = strip(numToString.call(list, 2));
-            result = strip(numToString.call(list & this.m, 2)) === count;
-        } else {
-            list = arrayify.apply(this, arguments);
-            count = list.length;
-            result = countBits.call(this, list) === count;
-        }
-        return result;
+        list = arrayify.apply(this, arguments);
+        count = list.length;
+        return countBits.call(this, list) === count;
     };
 
     /**
@@ -131,12 +125,12 @@
      * different key or Bitmask matching method.
      *
      * @param Array bitMasks
-     * @param String key
      * @param String method
+     * @param String key
      * @return Array
      */
-    bitProto.filter = function(bitMasks, key, method) {
-        var i, result, m;
+    bitProto.filter = function(bitMasks, method, key) {
+        var i, result, m, count;
 
         // set some defaults
         bitMasks = bitMasks || [];
@@ -145,8 +139,11 @@
         result = [];
         m = this.m;
         i = bitMasks.length;
+
+        count = strip(numToString.call(this.m, 2));
+
         while (i--) {
-            if (this[method](bitMasks[i][key])){
+            if (filters[method].call(this, bitMasks[i][key], count)){
                 result.push(bitMasks[i]);
             }
         }
@@ -242,4 +239,23 @@
      */
     strip = function(binary){
         return binary.replace(/0/g, '').length;
+    };
+
+    /**
+     * Similar to the above Bitmask methods, only these methods take a mask value rather than tags.
+     *
+     * @param Number value
+     * @return Boolean
+     */
+    filters = {
+        all : function(value, count) {
+            return strip(numToString.call(value & this.m, 2)) === count;
+        },
+
+        any : function(value) {
+            return strip(numToString.call(value & this.m, 2)) > 0;
+        },
+        match : function(value) {
+            return value === this.m;
+        }
     };

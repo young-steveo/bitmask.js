@@ -190,7 +190,7 @@
                     new Bitmask('four', 'one')
                 ];
                 primary = new Bitmask('one');
-                expect(primary.filter(masks).length).toBe(1);
+                expect(primary.filter(masks).length).toBe(3);
             });
 
             it('can use a custom key', function(){
@@ -204,7 +204,23 @@
                     { someKey : new Bitmask('four', 'one').m }
                 ];
                 primary = new Bitmask('one');
-                expect(primary.filter(masks, 'someKey').length).toBe(1);
+                expect(primary.filter(masks, 'all', 'someKey').length).toBe(3);
+            });
+
+            it('can use different filtering methods', function(){
+                var primary, masks;
+
+                masks = [
+                    new Bitmask('one'),
+                    new Bitmask('one', 'two'),
+                    new Bitmask('three'),
+                    new Bitmask('two', 'three'),
+                    new Bitmask('four', 'one', 'two')
+                ];
+                primary = new Bitmask('one', 'two');
+                expect(primary.filter(masks, 'all').length).toBe(2);
+                expect(primary.filter(masks, 'any').length).toBe(4);
+                expect(primary.filter(masks, 'match').length).toBe(1);
             });
         });
 
