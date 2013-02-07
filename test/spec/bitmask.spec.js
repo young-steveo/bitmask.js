@@ -167,5 +167,47 @@
                 expect(list.someNewTag).toBeDefined();
             });
         });
+
+        describe('match', function(){
+            it('must match mask exactly', function(){
+                var mask;
+
+                mask = new Bitmask('four', 'three', 'two');
+                expect(mask.match('three', 'two', 'four')).toBe(true);
+                expect(mask.match('two', 'four')).toBe(false);
+            });
+        });
+
+        describe('filter', function(){
+            it('can filter multiple bitmasks', function(){
+                var primary, masks;
+
+                masks = [
+                    new Bitmask('one'),
+                    new Bitmask('one', 'two'),
+                    new Bitmask('three'),
+                    new Bitmask('two', 'three'),
+                    new Bitmask('four', 'one')
+                ];
+                primary = new Bitmask('one');
+                expect(primary.filter(masks).length).toBe(1);
+            });
+
+            it('can use a custom key', function(){
+                var primary, masks;
+
+                masks = [
+                    { someKey : new Bitmask('one').m },
+                    { someKey : new Bitmask('one', 'two').m },
+                    { someKey : new Bitmask('three').m },
+                    { someKey : new Bitmask('two', 'three').m },
+                    { someKey : new Bitmask('four', 'one').m }
+                ];
+                primary = new Bitmask('one');
+                expect(primary.filter(masks, 'someKey').length).toBe(1);
+            });
+        });
+
+
     });
 }(describe, it, expect, jasmine, Bitmask));

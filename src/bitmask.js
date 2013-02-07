@@ -1,4 +1,4 @@
-    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split,
+    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split, strip,
         objProto, numToString, objToString, countBits, bitProto, namespace;
 
     indexes = {};
@@ -53,8 +53,8 @@
     };
 
     /**
-     * Takes an array of tags (or multiple tags as params) and returns a boolean indicating whether
-     * all of the tags have been set.
+     * Takes an array of tags, multiple tags as params, or a bitmask value and returns a boolean
+     * indicating whether all of the tags have been set.
      *
      * All tags must be previously set for this method to return true.
      *
@@ -62,12 +62,17 @@
      * @return Boolean
      */
     bitProto.all = function(list) {
-        var count;
+        var count, result;
 
-        list = arrayify.apply(this, arguments);
-        count = list.length;
-
-        return countBits.call(this, list) === count;
+        if (typeof list === 'number') {
+            count = strip(numToString.call(list, 2));
+            result = strip(numToString.call(list & this.m, 2)) === count;
+        } else {
+            list = arrayify.apply(this, arguments);
+            count = list.length;
+            result = countBits.call(this, list) === count;
+        }
+        return result;
     };
 
     /**
@@ -122,7 +127,7 @@
      * Takes an array of objects and returns an array of all objects with a mask defined by `key`
      * that matches this bitmask.
      *
-     * Default key is `mask` and default matching method is `all`.  Pass in strings to define a
+     * Default key is `m` and default matching method is `all`.  Pass in strings to define a
      * different key or Bitmask matching method.
      *
      * @param Array bitMasks
@@ -131,21 +136,20 @@
      * @return Array
      */
     bitProto.filter = function(bitMasks, key, method) {
-        var i, result, m = this.m;
+        var i, result, m;
 
         // set some defaults
         bitMasks = bitMasks || [];
-        key = key || 'mask';
+        key = key || 'm';
         method = method || 'all';
         result = [];
-
+        m = this.m;
         i = bitMasks.length;
         while (i--) {
-            if (bitMasks[i][key] === m){
+            if (this[method](bitMasks[i][key])){
                 result.push(bitMasks[i]);
             }
         }
-
         return result;
     };
 
@@ -206,8 +210,14 @@
         return objToString.call(list) === '[object Array]' ? list : slice.call(arguments);
     };
 
+    /**
+     * counts bits after registering any unregistered tags
+     *
+     * @param Array list
+     * @return Number
+     */
     countBits = function(list) {
-        return numToString.call(register.apply(this, list) & this.m, 2).replace(/0/g, '').length;
+        return strip(numToString.call(register.apply(this, list) & this.m, 2));
     };
 
     /**
@@ -221,4 +231,15 @@
         raw = single.split('.', 2);
         group = raw.length === 1 ? namespace : raw[0];
         return [group, raw[1] || raw[0]];
+    };
+
+    /**
+     * Takes a binary number represented as a string and strips the 0's, returning the length of
+     * the resulting string
+     *
+     * @param String binary
+     * @return Number
+     */
+    strip = function(binary){
+        return binary.replace(/0/g, '').length;
     };
