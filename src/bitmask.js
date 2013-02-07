@@ -141,7 +141,32 @@
         i = bitMasks.length;
 
         count = strip(numToString.call(this.m, 2));
-        method = filters[method];
+        switch(method){
+            case 'all':
+                while (i--) {
+                    single = bitMasks[i];
+                    if (strip(numToString.call(single[key] & m, 2)) === count) {
+                        result.push(single);
+                    }
+                }
+                break;
+            case 'any':
+                while (i--) {
+                    single = bitMasks[i];
+                    if (strip(numToString.call(single[key] & m, 2)) > 0) {
+                        result.push(single);
+                    }
+                }
+                break;
+            case 'match':
+                while (i--) {
+                    single = bitMasks[i];
+                    if (single[key] === m) {
+                        result.push(single);
+                    }
+                }
+                break;
+        }
         while (i--) {
             single = bitMasks[i];
             if (method.call(this, single[key], count)){
