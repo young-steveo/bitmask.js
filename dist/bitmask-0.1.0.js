@@ -1,5 +1,5 @@
 /**
- * bitmask v0.1.0 - 2013-02-06
+ * bitmask v0.1.0 - 2013-02-07
  * Quick and painless bitmasks for controlling application state.
  *
  * Copyright (c) 2013 Stephen Young <young.steveo@gmail.com>
@@ -139,7 +139,7 @@
      * @return Array
      */
     bitProto.filter = function(bitMasks, method, key) {
-        var i, result, m, count;
+        var i, result, m, count, single;
 
         // set some defaults
         bitMasks = bitMasks || [];
@@ -150,10 +150,11 @@
         i = bitMasks.length;
 
         count = strip(numToString.call(this.m, 2));
-
+        method = filters[method];
         while (i--) {
-            if (filters[method].call(this, bitMasks[i][key], count)){
-                result.push(bitMasks[i]);
+            single = bitMasks[i];
+            if (method.call(this, single[key], count)){
+                result.push(single);
             }
         }
         return result;
