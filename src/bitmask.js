@@ -18,10 +18,8 @@
      */
     Bitmask = function(){
         this.m = 0;
-        if (typeof arguments[0] === 'string'){
+        if (arguments.length){
             this.set.apply(this, arguments);
-        } else {
-            this.set.apply(this, arguments[0]);
         }
     };
 

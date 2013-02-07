@@ -8,6 +8,8 @@
                 mask = new Bitmask();
                 mask.set('one', 'two', 'three');
                 list = Bitmask.inspect();
+
+                list = list[Object.keys(list)[0]];
                 expect(list.one).toBeDefined();
                 expect(list.two).toBeDefined();
                 expect(list.three).toBeDefined();
@@ -17,12 +19,13 @@
         describe('constructor', function() {
             it('starts with an empty bitmask', function() {
                 var mask = new Bitmask();
-                expect(mask.mask).toBe(0);
+                expect(mask.m).toBe(0);
             });
             it('calls set', function() {
                 var mask, list;
                 mask = new Bitmask('one');
                 list = Bitmask.inspect();
+                list = list[Object.keys(list)[0]];
                 expect(list.one).toBeDefined();
             });
         });
@@ -88,6 +91,7 @@
                 mask.isset('fourtyFour');
 
                 list = Bitmask.inspect();
+                list = list[Object.keys(list)[0]];
                 expect(list.fourtyFour).toBeUndefined();
             });
         });
@@ -142,8 +146,11 @@
                 expect(Bitmask.get('someTag')).toEqual(jasmine.any(Number));
             });
             it('registers tags', function(){
+                var list;
                 Bitmask.get('someNewTag');
-                expect(Bitmask.inspect().someNewTag).toBeDefined();
+                list = Bitmask.inspect();
+                list = list[Object.keys(list)[0]];
+                expect(list.someNewTag).toBeDefined();
             });
         });
     });
