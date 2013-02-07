@@ -249,7 +249,7 @@
         },
 
         any : function(value) {
-            return (value & this.m).toString(2).indexOf('1') !== -1;
+            return (value & this.m) > 0;
         },
         match : function(value) {
             return value === this.m;
