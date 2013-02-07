@@ -1,4 +1,4 @@
-    var Bitmask, tags, indexes, slice, pow, has, register, arrayify,
+    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split,
         objProto, numToString, objToString, countBits, bitProto, namespace;
 
     indexes = {};
@@ -16,10 +16,11 @@
     /**
      * Constructor.
      */
-    Bitmask = function(){
+    Bitmask = function(list){
         this.m = 0;
-        if (arguments.length){
-            this.set.apply(this, arguments);
+        if (list) {
+            list = arrayify.apply(this, arguments);
+            this.set.apply(this, list);
         }
     };
 
@@ -77,17 +78,21 @@
      * @return Boolean
      */
     bitProto.isset = function(list) {
-        var count, valid, i;
+        var count, valid, i, parts, group, tag;
 
         list = arrayify.apply(this, arguments);
         i = count = list.length;
         while(i--){
-            valid = has.call(tags, list[i]);
+            parts = split(list[i]);
+            group = parts[0];
+            tag = parts[1];
+            tags[group] = tags[group] || {};
+            valid = has.call(tags[group], tag);
             if (!valid) {
                 break;
             }
         }
-        return valid ? countBits.call(this, list) === count : false;
+        return valid ? (countBits.call(this, list) === count) : false;
     };
 
     /**
@@ -178,17 +183,17 @@
      * @return Number
      */
     register = function() {
-        var args, i, sum, tag, raw, group;
+        var args, i, sum, tag, parts, group;
 
         sum = 0;
         args = slice.call(arguments);
         i = args.length;
         while(i--) {
-            raw = args[i].split('.', 2);
-            group = raw.length === 1 ? namespace : raw[0];
+            parts = split(args[i]);
+            group = parts[0];
+            tag = parts[1];
             tags[group] = tags[group] || {};
             indexes[group] = indexes[group] || 0;
-            tag = raw[1] || raw[0];
             sum += has.call(tags[group], tag) ? tags[group][tag] : (tags[group][tag] = pow(2, indexes[group]++));
         }
         return sum;
@@ -203,4 +208,17 @@
 
     countBits = function(list) {
         return numToString.call(register.apply(this, list) & this.m, 2).replace(/0/g, '').length;
+    };
+
+    /**
+     * Splits a namespaced string into an array
+     *
+     * @param  String single
+     * @return Array
+     */
+    split = function(single) {
+        var raw, group;
+        raw = single.split('.', 2);
+        group = raw.length === 1 ? namespace : raw[0];
+        return [group, raw[1] || raw[0]];
     };

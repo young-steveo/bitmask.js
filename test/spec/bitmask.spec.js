@@ -28,6 +28,13 @@
                 list = list[Object.keys(list)[0]];
                 expect(list.one).toBeDefined();
             });
+            it('calls set with an array', function() {
+                var mask, list;
+                mask = new Bitmask(['one']);
+                list = Bitmask.inspect();
+                list = list[Object.keys(list)[0]];
+                expect(list.one).toBeDefined();
+            });
         });
 
         describe('all', function() {
@@ -72,6 +79,13 @@
                 mask = new Bitmask();
                 mask.set('one', 'three');
                 expect(mask.all(['one', 'two'])).toBe(false);
+            });
+            it('must match all', function() {
+                var mask;
+
+                mask = new Bitmask();
+                mask.set('one', 'three');
+                expect(mask.all('one', 'three', 'nine')).toBe(false);
             });
         });
 
