@@ -1,18 +1,17 @@
     var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split, strip, filters,
-        objProto, numToString, objToString, countBits, bitProto, namespace;
+        objProto, objToString, countBits, bitProto, namespace;
 
     indexes = {};
     tags = {};
 
     pow = Math.pow;
     slice = Array.prototype.slice;
-    numToString = Number.prototype.toString;
 
     objProto = Object.prototype;
     objToString = objProto.toString;
     has = objProto.hasOwnProperty;
 
-    namespace = numToString.call(Math.random(), 36).substr(2);
+    namespace = Math.random().toString(36).substr(2);
     /**
      * Constructor.
      */
@@ -140,7 +139,7 @@
         m = this.m;
         i = bitMasks.length;
 
-        count = strip(numToString.call(this.m, 2));
+        count = strip(this.m.toString(2));
         method = filters[method];
         while (i--) {
             single = bitMasks[i];
@@ -215,7 +214,7 @@
      * @return Number
      */
     countBits = function(list) {
-        return strip(numToString.call(register.apply(this, list) & this.m, 2));
+        return strip((register.apply(this, list) & this.m).toString(2));
     };
 
     /**
