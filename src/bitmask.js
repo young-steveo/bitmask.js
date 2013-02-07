@@ -167,12 +167,6 @@
                 }
                 break;
         }
-        while (i--) {
-            single = bitMasks[i];
-            if (method.call(this, single[key], count)){
-                result.push(single);
-            }
-        }
         return result;
     };
 
