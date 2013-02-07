@@ -14,6 +14,19 @@
             });
         });
 
+        describe('constructor', function() {
+            it('starts with an empty bitmask', function() {
+                var mask = new Bitmask();
+                expect(mask.mask).toBe(0);
+            });
+            it('calls set', function() {
+                var mask, list;
+                mask = new Bitmask('one');
+                list = Bitmask.inspect();
+                expect(list.one).toBeDefined();
+            });
+        });
+
         describe('all', function() {
             it('returns a boolean', function() {
                 var mask;
@@ -66,6 +79,16 @@
                 mask = new Bitmask();
                 mask.set('one', 'three');
                 expect(mask.isset('one')).toBe(true);
+            });
+            it('Does not register new tags', function() {
+                var mask, list;
+
+                mask = new Bitmask();
+                mask.set('one', 'three');
+                mask.isset('fourtyFour');
+
+                list = Bitmask.inspect();
+                expect(list.fourtyFour).toBeUndefined();
             });
         });
 
