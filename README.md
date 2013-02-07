@@ -1,40 +1,51 @@
 # Bitmask.js
 
-A library for fast and painless bitmasks for javascript projects.
+Fast and painless bitmasks for javascript projects.
 
-## Example
+## Bitmask Overview
+Bitmasks and bitwise operations are great tools for managing application state or filtering large
+lists of data quickly.  However, applying bitmask logic can be pretty daunting if you've had limited
+experience working with bitwise operators.
 
+Bitmask.js provides a simple api that gives you the power of bitmasks without all the headaches.
+With Bitmask.js you only need to worray about your data.
+
+*Bitmask.js is partially inspired by [bitTags](https://github.com/mexitek/bitTags). bitTags provides
+some useful bitwise operations but does not provide all of the functionality that Bitmask.js gives
+you*
+
+### Quick Example
+Bitmasks are great for defining application state, like log/debugging levels.
 ```javascript
-var mask = new Bitmask();
+var debug = new Bitmask('log', 'warn');
 
-/**
- * Bitmask::set can take any string tags you want to use.  It automatically assigns bit values
- * to your tags, so you don't have to worry about it.
- */
-mask.set('log', 'warn');
-
-/**
- * Bitmask::all checks the tags to see if all of them have been set.
- */
-if (mask.all('log', 'warn', 'widget')){
-    console.log('This message is supressed, because the bitmask did not specify "widget"');
+if (debug.isset('log')){
+    console.log('This message will display in the console.');
 }
-
-/**
- * Bitmask::isset is an alias of Bitmask::all
- */
-if (mask.isset('log')){
-    console.log('this message will display in the console.');
-}
-
-if (mask.isset('error')) {
+if (debug.isset('error')) {
     console.error('This message is supressed, because the bitmask did not specify "error"');
 }
-
-/**
- * Bitmask::any will return true if any of the tags have been set.
- */
-if (mask.any('bingo', 'starlight', 'warn', 'thingie')) {
+if (debug.isset('log', 'warn', 'widget')){
+    console.log('This message is supressed, because the bitmask did not specify "widget"');
+}
+if (debug.any('bingo', 'starlight', 'warn', 'thingie')) {
     console.log('this message will display in the console because "warn" was set.');
 }
+```
+
+### Filtering
+Another use case for bitmasks is for filtering data quickly.
+```javascript
+var list = [
+    new Bitmask('red', 'orange', 'yellow'),
+    new Bitmask('green', 'blue', 'indigo'),
+    new Bitmask('violet'),
+    new Bitmask('pink', 'purple', 'red'),
+    new Bitmask('green', 'white', 'red')
+];
+
+var mask = new Bitmask('red');
+
+// newList will contain an array with three objects
+var newList = mask.filter(list);
 ```
