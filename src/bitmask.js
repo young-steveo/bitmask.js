@@ -1,4 +1,4 @@
-    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split, strip, filters,
+    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split, filters,
         objProto, objToString, countBits, bitProto, namespace;
 
     indexes = {};
@@ -139,7 +139,7 @@
         m = this.m;
         i = bitMasks.length;
 
-        count = strip(this.m.toString(2));
+        count = this.m.toString(2).replace(/0/g, '').length;
         method = filters[method];
         while (i--) {
             single = bitMasks[i];
@@ -214,7 +214,7 @@
      * @return Number
      */
     countBits = function(list) {
-        return strip((register.apply(this, list) & this.m).toString(2));
+        return (register.apply(this, list) & this.m).toString(2).replace(/0/g, '').length;
     };
 
     /**
@@ -231,17 +231,6 @@
     };
 
     /**
-     * Takes a binary number represented as a string and strips the 0's, returning the length of
-     * the resulting string
-     *
-     * @param String binary
-     * @return Number
-     */
-    strip = function(binary){
-        return binary.replace(/0/g, '').length;
-    };
-
-    /**
      * Similar to the above Bitmask methods, only these methods take a mask value rather than tags.
      *
      * @param Number value
@@ -249,11 +238,11 @@
      */
     filters = {
         all : function(value, count) {
-            return strip((value & this.m).toString(2)) === count;
+            return (value & this.m).toString(2).replace(/0/g, '').length === count;
         },
 
         any : function(value) {
-            return strip((value & this.m).toString(2)) > 0;
+            return (value & this.m).toString(2).replace(/0/g, '').length > 0;
         },
         match : function(value) {
             return value === this.m;
