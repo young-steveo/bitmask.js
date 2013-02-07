@@ -138,7 +138,7 @@
      * @return Array
      */
     bitProto.filter = function(bitMasks, method, key) {
-        var i, result, m, count, single;
+        var i, result, m, binary, single;
 
         // set some defaults
         bitMasks = bitMasks || [];
@@ -148,11 +148,11 @@
         m = this.m;
         i = bitMasks.length;
 
-        count = this.m.toString(2).replace(/0/g, '').length;
+        binary = this.m.toString(2);
         method = filters[method];
         while (i--) {
             single = bitMasks[i];
-            if (method.call(this, single[key], count)){
+            if (method.call(this, single[key], binary)){
                 result.push(single);
             }
         }
@@ -246,8 +246,8 @@
      * @return Boolean
      */
     filters = {
-        all : function(value, count) {
-            return (value & this.m).toString(2).replace(/0/g, '').length === count;
+        all : function(value, binary) {
+            return (value & this.m).toString(2) === binary;
         },
 
         any : function(value) {
