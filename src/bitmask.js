@@ -250,11 +250,11 @@
      */
     filters = {
         all : function(value, count) {
-            return strip(numToString.call(value & this.m, 2)) === count;
+            return strip((value & this.m).toString(2)) === count;
         },
 
         any : function(value) {
-            return strip(numToString.call(value & this.m, 2)) > 0;
+            return strip((value & this.m).toString(2)) > 0;
         },
         match : function(value) {
             return value === this.m;
