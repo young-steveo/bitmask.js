@@ -141,7 +141,7 @@
         method = filters[method];
         while (i--) {
             single = bitMasks[i];
-            if (method.call(this, single[key], m)){
+            if (method(single[key], m)){
                 result.push(single);
             }
         }
@@ -242,7 +242,7 @@
         any : function(value, mValue) {
             return value === mValue || ((value & mValue) > 0);
         },
-        match : function(value) {
-            return value === this.m;
+        match : function(value, mValue) {
+            return value === mValue;
         }
     };
