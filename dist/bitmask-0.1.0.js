@@ -245,11 +245,11 @@
      */
     filters = {
         all : function(value, mValue) {
-            return (value & mValue) === mValue;
+            return value === mValue || ((value & mValue) === mValue);
         },
 
-        any : function(value) {
-            return (value & this.m) > 0;
+        any : function(value, mValue) {
+            return value === mValue || ((value & mValue) > 0);
         },
         match : function(value) {
             return value === this.m;
