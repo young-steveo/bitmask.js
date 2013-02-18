@@ -1,4 +1,4 @@
-    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split, filters,
+    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split,
         objProto, objToString, bitProto, namespace;
 
     indexes = {};
@@ -118,7 +118,7 @@
      * Takes an array of objects and returns an array of all objects with a mask defined by `key`
      * that matches this bitmask.
      *
-     * Default key is `m` and default matching method is `all`.  Pass in strings to define a
+     * Default key is `m` and default matching method is `match`.  Pass in strings to define a
      * different key or Bitmask matching method.
      *
      * @param Array bitMasks
@@ -127,20 +127,24 @@
      * @return Array
      */
     bitProto.filter = function(bitMasks, method, key) {
-        var i, result, m, single, item;
+        var i, result, m, single, item, all, any;
 
         // set some defaults
-        bitMasks = bitMasks || [];
         key = key || 'm';
-        method = method || 'all';
+        all = method === 'all';
+        any = method === 'any';
         result = [];
         m = this.m;
         i = bitMasks.length;
-        method = filters[method];
         while (i--) {
             single = bitMasks[i];
             item = single[key];
-            if (item === m || method(item, m)){
+            if (
+                item === m || // Match
+                (all && ((item & m) === m )) || // All
+                (any && ((item & m) > 0)) // Any
+
+            ){
                 result.push(single);
             }
         }
@@ -215,23 +219,4 @@
         raw = single.split('.', 2);
         group = raw.length === 1 ? namespace : raw[0];
         return [group, raw[1] || raw[0]];
-    };
-
-    /**
-     * Similar to the above Bitmask methods, only these methods take a mask value rather than tags.
-     *
-     * @param Number value
-     * @return Boolean
-     */
-    filters = {
-        all : function(value, mValue) {
-            return (value & mValue) === mValue;
-        },
-
-        any : function(value, mValue) {
-            return (value & mValue) > 0;
-        },
-        match : function(value, mValue) {
-            return value === mValue;
-        }
     };

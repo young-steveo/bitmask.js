@@ -190,7 +190,7 @@
                     new Bitmask('four', 'one')
                 ];
                 primary = new Bitmask('one');
-                expect(primary.filter(masks).length).toBe(3);
+                expect(primary.filter(masks).length).toBe(1);
             });
 
             it('can use a custom key', function(){
