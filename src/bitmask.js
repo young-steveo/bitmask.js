@@ -1,5 +1,5 @@
-    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split, filters,
-        objProto, objToString, countBits, bitProto, namespace;
+    var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split,
+        objProto, objToString, bitProto, namespace;
 
     indexes = {};
     tags = {};
@@ -60,12 +60,10 @@
      * @param Array|String [, String...] list
      * @return Boolean
      */
-    bitProto.all = function(list) {
-        var count;
-
-        list = arrayify.apply(this, arguments);
-        count = list.length;
-        return countBits.call(this, list) === count;
+    bitProto.all = function() {
+        var m;
+        m = register.apply(this, arrayify.apply(this, arguments));
+        return (m & this.m) === m;
     };
 
     /**
@@ -76,10 +74,10 @@
      * @return Boolean
      */
     bitProto.isset = function(list) {
-        var count, valid, i, parts, group, tag;
+        var valid, i, parts, group, tag;
 
         list = arrayify.apply(this, arguments);
-        i = count = list.length;
+        i = list.length;
         while(i--){
             parts = split(list[i]);
             group = parts[0];
@@ -90,7 +88,7 @@
                 break;
             }
         }
-        return valid ? (countBits.call(this, list) === count) : false;
+        return valid ? (this.all(list)) : false;
     };
 
     /**
@@ -113,14 +111,14 @@
      * @return Boolean
      */
     bitProto.any = function() {
-        return !!countBits.call(this, arrayify.apply(this, arguments));
+        return (register.apply(this, arrayify.apply(this, arguments)) & this.m) > 0;
     };
 
     /**
      * Takes an array of objects and returns an array of all objects with a mask defined by `key`
      * that matches this bitmask.
      *
-     * Default key is `m` and default matching method is `all`.  Pass in strings to define a
+     * Default key is `m` and default matching method is `match`.  Pass in strings to define a
      * different key or Bitmask matching method.
      *
      * @param Array bitMasks
@@ -129,19 +127,24 @@
      * @return Array
      */
     bitProto.filter = function(bitMasks, method, key) {
-        var i, result, m, single;
+        var i, result, m, single, item, all, any;
 
         // set some defaults
-        bitMasks = bitMasks || [];
         key = key || 'm';
-        method = method || 'all';
+        all = method === 'all';
+        any = method === 'any';
         result = [];
         m = this.m;
         i = bitMasks.length;
-        method = filters[method];
         while (i--) {
             single = bitMasks[i];
-            if (method(single[key], m)){
+            item = single[key];
+            if (
+                item === m || // Match
+                (all && ((item & m) === m )) || // All
+                (any && ((item & m) > 0)) // Any
+
+            ){
                 result.push(single);
             }
         }
@@ -206,16 +209,6 @@
     };
 
     /**
-     * counts bits after registering any unregistered tags
-     *
-     * @param Array list
-     * @return Number
-     */
-    countBits = function(list) {
-        return (register.apply(this, list) & this.m).toString(2).replace(/0/g, '').length;
-    };
-
-    /**
      * Splits a namespaced string into an array
      *
      * @param  String single
@@ -226,23 +219,4 @@
         raw = single.split('.', 2);
         group = raw.length === 1 ? namespace : raw[0];
         return [group, raw[1] || raw[0]];
-    };
-
-    /**
-     * Similar to the above Bitmask methods, only these methods take a mask value rather than tags.
-     *
-     * @param Number value
-     * @return Boolean
-     */
-    filters = {
-        all : function(value, mValue) {
-            return value === mValue || ((value & mValue) === mValue);
-        },
-
-        any : function(value, mValue) {
-            return value === mValue || ((value & mValue) > 0);
-        },
-        match : function(value, mValue) {
-            return value === mValue;
-        }
     };
