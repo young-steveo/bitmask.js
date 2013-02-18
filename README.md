@@ -47,5 +47,5 @@ var list = [
 var mask = new Bitmask('red');
 
 // newList will contain an array with three objects
-var newList = mask.filter(list);
+var newList = mask.filter(list, 'any');
 ```
