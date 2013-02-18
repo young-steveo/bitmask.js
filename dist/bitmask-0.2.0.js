@@ -1,5 +1,5 @@
 /**
- * bitmask v0.1.0 - 2013-02-17
+ * bitmask v0.2.0 - 2013-02-17
  * Quick and painless bitmasks for controlling application state.
  *
  * Copyright (c) 2013 Stephen Young <young.steveo@gmail.com>
