@@ -254,5 +254,23 @@
                 expect(mask.isset('baz.tag31')).toBe(false);
             });
         });
+        describe('bitwise methods', function(){
+            it('exposes an AND operation', function(){
+                var mask, a, ab;
+
+                mask = new Bitmask('a', 'b');
+                a = Bitmask.get('a');
+                ab = Bitmask.get('a', 'b');
+                expect(a & ab).toBe(mask.and('a'));
+            });
+            it('exposes an OR operation', function(){
+                var mask, a, bc;
+
+                mask = new Bitmask('b', 'c');
+                a = Bitmask.get('a');
+                bc = Bitmask.get('b', 'c');
+                expect(a | bc).toBe(mask.or('a'));
+            });
+        });
     });
 }(describe, it, expect, jasmine, Bitmask));

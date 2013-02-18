@@ -34,13 +34,23 @@
      *
      * All tags must be previously set for this method to return true.
      *
-     * @param Array|String [, String...] list
+     * @param Array|String [, String...]
      * @return Boolean
      */
     bitProto.all = function() {
         var m;
         m = register.apply(this, arrayify.apply(this, arguments));
         return (m & this.m) === m;
+    };
+
+    /**
+     * Returns the AND value of the tags checked against this.m
+     *
+     * @param Array|String [, String...]
+     * @return Number
+     */
+    bitProto.and = function() {
+        return register.apply(this, arrayify.apply(this, arguments)) & this.m;
     };
 
     /**
@@ -131,6 +141,16 @@
      */
     bitProto.match = function() {
         return register.apply(this, arguments) === this.m;
+    };
+
+    /**
+     * Returns the OR value of the tags checked against this.m
+     *
+     * @param Array|String [, String...]
+     * @return Number
+     */
+    bitProto.or = function() {
+        return register.apply(this, arrayify.apply(this, arguments)) | this.m;
     };
 
     /**
