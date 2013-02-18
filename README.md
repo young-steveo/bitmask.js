@@ -77,7 +77,7 @@ simple `for` loops.
 
 ### Namespacing
 Bitwise operations are limited to 32 bits in Javascript.  If you want to work with a large set of
-tags, you can group them insto sets of ~30 using namespaces.
+tags, you can group them into sets `<= 31` total tags using namespaces.
 ```javascript
 
 // example of a failure
