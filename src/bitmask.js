@@ -183,6 +183,16 @@
     };
 
     /**
+     * Ensures list is an array by wrapping it in one if it is not.
+     *
+     * @param mixed list
+     * @return Array
+     */
+    arrayify = function(list) {
+        return objToString.call(list) === '[object Array]' ? list : slice.call(arguments);
+    };
+
+    /**
      * Adds new tags to the list if they are not already present.
      * Returns the tag's value (or a sum of values).
      *
@@ -204,13 +214,6 @@
             sum += has.call(tags[group], tag) ? tags[group][tag] : (tags[group][tag] = pow(2, indexes[group]++));
         }
         return sum;
-    };
-
-    /**
-     * Some common internal logic
-     */
-    arrayify = function(list) {
-        return objToString.call(list) === '[object Array]' ? list : slice.call(arguments);
     };
 
     /**
