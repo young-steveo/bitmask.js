@@ -223,7 +223,54 @@
                 expect(primary.filter(masks, 'match').length).toBe(1);
             });
         });
+        describe('namespaces', function(){
+            it('works like normal tags', function(){
+                var mask;
+                mask = new Bitmask('foo.x', 'foo.y', 'foo.z');
+                expect(mask.isset('foo.x')).toBe(true);
+            });
+            it('works with 31 bits', function(){
+                var mask, i, set;
 
+                mask = new Bitmask();
+                set = [];
+                i = 31;
+                while (i--) {
+                    set.push('bar.tag' + i);
+                }
+                mask.set(set);
+                expect(mask.isset('bar.tag30')).toBe(true);
+            });
+            it('gives unexpected results if 32 or more bits are used', function(){
+                var mask, i, set;
 
+                mask = new Bitmask();
+                set = [];
+                i = 32;
+                while (i--) {
+                    set.push('baz.tag' + i);
+                }
+                mask.set(set);
+                expect(mask.isset('baz.tag31')).toBe(false);
+            });
+        });
+        describe('bitwise methods', function(){
+            it('exposes an AND operation', function(){
+                var mask, a, ab;
+
+                mask = new Bitmask('a', 'b');
+                a = Bitmask.get('a');
+                ab = Bitmask.get('a', 'b');
+                expect(a & ab).toBe(mask.and('a'));
+            });
+            it('exposes an OR operation', function(){
+                var mask, a, bc;
+
+                mask = new Bitmask('b', 'c');
+                a = Bitmask.get('a');
+                bc = Bitmask.get('b', 'c');
+                expect(a | bc).toBe(mask.or('a'));
+            });
+        });
     });
 }(describe, it, expect, jasmine, Bitmask));
