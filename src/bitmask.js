@@ -101,8 +101,9 @@
      * @return Boolean
      */
     bitProto.isset = function(list) {
-        var valid, i, parts, group, tag;
+        var valid, i, parts, group, tag, m;
 
+        m = this.m;
         list = arrayify.apply(this, arguments);
         i = list.length;
         while(i--){
@@ -115,7 +116,11 @@
                 break;
             }
         }
-        return valid ? (this.all(list)) : false;
+        if (valid) {
+            m = register.apply(this, list);
+            valid = (m & this.m) === m;
+        }
+        return valid;
     };
 
     /**
@@ -144,11 +149,11 @@
      * bm.all('A.test', 'B.test');
      *
      *
-     * @param String [, String ...]
+     * @param Array|String [, String ...]
      * @return Number
      */
     bitProto.set = function() {
-        return this.m = register.apply(this, arguments);
+        return this.m = register.apply(this, arrayify.apply(this, arguments));
     };
 
     /**
