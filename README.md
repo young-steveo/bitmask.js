@@ -49,3 +49,22 @@ var mask = new Bitmask('red');
 // newList will contain an array with three objects
 var newList = mask.filter(list, 'any');
 ```
+
+#### Specifying a Key
+Every Bitmask object has an `m` key that can be stored in your own objects so that you can filter
+more easily.  As long as the array contains objects with a key that points to this `m` value:
+
+```javascript
+
+// key `tags` in these objects contains the `m` value
+var list = [
+    { temp : 'hot', tags : new Bitmask('hot', 'red').m },
+    { temp : 'cold', tags : new Bitmask('cold', 'blue').m },
+    { temp : 'warm', tags : new Bitmask('warm', 'red', 'blue').m }
+];
+
+var mask = new Bitmask('blue');
+
+// Notice the key name as the third param.
+var newList = mask.filter(list, 'any', 'tags');
+```
