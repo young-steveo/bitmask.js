@@ -1,6 +1,6 @@
 {
   "name": "bitmask",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Stephen Young <young.steveo@gmail.com>",
   "description": "Quick and painless bitmasks for controlling application state.",
   "contributors": [
@@ -9,10 +9,10 @@
       "email": "young.steveo@gmail.com"
     }
   ],
-  "main": null,
+  "main": "./dist/bitmask-0.3.0.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/..."
+    "url": "https://github.com/young-steveo/bitmask.js"
   },
   "keywords": [],
   "dependencies": { },
