@@ -9,10 +9,10 @@
       "email": "young.steveo@gmail.com"
     }
   ],
-  "main": null,
+  "main": "./dist/bitmask-0.3.0.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/..."
+    "url": "https://github.com/young-steveo/bitmask.js"
   },
   "keywords": [],
   "dependencies": { },
