@@ -1,6 +1,6 @@
 {
   "name": "bitmask",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Stephen Young <young.steveo@gmail.com>",
   "description": "Quick and painless bitmasks for controlling application state.",
   "contributors": [
