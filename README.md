@@ -2,8 +2,8 @@
 
 Fast and painless bitmasks for javascript projects.
 
-1. [Development](https://github.com/young-steveo/bitmask.js/blob/0.2/dist/bitmask-0.2.0.js) **v0.2.0**
-2. [Production](https://github.com/young-steveo/bitmask.js/blob/0.2/dist/bitmask-0.2.0.min.js) **v0.2.0**
+1. [Development](https://github.com/young-steveo/bitmask.js/blob/0.3.0/dist/bitmask-0.3.0.js) **v0.3.0**
+2. [Production](https://github.com/young-steveo/bitmask.js/blob/0.3.0/dist/bitmask-0.3.0.min.js) **v0.3.0**
 
 ## Bitmask Overview
 Bitmasks and bitwise operations are great tools for managing application state or filtering large
@@ -74,3 +74,53 @@ var newList = mask.filter(list, 'any', 'tags');
 #### Performance
 Here are some [jsPerf tests](http://jsperf.com/bitmask-js/5) demonstrating Bitmask.js v.s. some
 simple `for` loops.
+
+### Namespacing
+Bitwise operations are limited to 32 bits in Javascript.  If you want to work with a large set of
+tags, you can group them insto sets of ~30 using namespaces.
+```javascript
+
+// example of a failure
+var mask = new Bitmask();
+var tags = [];
+var i = 32;
+while (i--) {
+    tags.push('tag' + i);
+}
+mask.set(set);
+
+if (mask.isset('tag31')){
+    console.log('This does not print because bitwise operations get funny at the 32 bit threshold.');
+}
+
+// namespaces
+tags = [];  // reset array
+i = 31;     // reset i
+while (i--) {
+    tags.push('namespace.tag' + i);
+}
+mask.set(set);
+
+if (mask.isset('namespace.tag30')){
+    console.log('This prints as expected, since the namespace only contains 31 bits.');
+}
+```
+Namespaces are shared between multiple Bitmask.js objects.
+
+### AND, OR, GET
+If you want to perform your own bitwise operations with the tag values, Bitmask.js has you covered.
+```javascript
+var mask = new Bitmask('one', 'two');
+
+/**
+ * The GET method is static and belongs to the Bitmask global object.  It will give you the value
+ * of tags stored internally
+ */
+var one = Bitmask.get('one');
+var oneTwo = Bitmask.get('one', 'two');
+
+if (mask.and('one') === (one & oneTwo)){
+    console.log('The AND method returns the value of the params AND the internal mask.');
+}
+```
+You can use `mask.or()` similarly.
