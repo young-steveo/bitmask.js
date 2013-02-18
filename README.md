@@ -55,7 +55,6 @@ Every Bitmask object has an `m` key that can be stored in your own objects so th
 more easily.  As long as the array contains objects with a key that points to this `m` value:
 
 ```javascript
-
 // key `tags` in these objects contains the `m` value
 var list = [
     { temp : 'hot', tags : new Bitmask('hot', 'red').m },
