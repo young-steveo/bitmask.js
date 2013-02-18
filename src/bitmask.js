@@ -29,29 +29,6 @@
     bitProto = Bitmask.prototype;
 
     /**
-     * Sets the Bitmask and returns it.
-     *
-     * Has support for namespacing tags like so: "Number.tag" "Color.red" "Settings.error"
-     *
-     * When using Namespaced tags, it is not possible to check masks against multiple namespaces
-     * at the same time.
-     *
-     * var bm = new Bitmask();
-     * bm.set('A.test');
-     * bm.set('B.test');
-     *
-     *  // wrong - this will give unexpected results
-     * bm.all('A.test', 'B.test');
-     *
-     *
-     * @param String [, String ...]
-     * @return Number
-     */
-    bitProto.set = function() {
-        return this.m = register.apply(this, arguments);
-    };
-
-    /**
      * Takes an array of tags or multiple tags as params and returns a boolean indicating whether
      * all of the tags have been set.
      *
@@ -64,41 +41,6 @@
         var m;
         m = register.apply(this, arrayify.apply(this, arguments));
         return (m & this.m) === m;
-    };
-
-    /**
-     * Bitmask::isset is exactly like Bitmask::all, except it doesn't register new tags in the
-     * global list.
-     *
-     * @param Array|String [, String...] list
-     * @return Boolean
-     */
-    bitProto.isset = function(list) {
-        var valid, i, parts, group, tag;
-
-        list = arrayify.apply(this, arguments);
-        i = list.length;
-        while(i--){
-            parts = split(list[i]);
-            group = parts[0];
-            tag = parts[1];
-            tags[group] = tags[group] || {};
-            valid = has.call(tags[group], tag);
-            if (!valid) {
-                break;
-            }
-        }
-        return valid ? (this.all(list)) : false;
-    };
-
-    /**
-     * Similar to Bitmask::all, except the params must match the bitmask exactly (all set, and
-     * none missing)
-     *
-     * @return Boolean
-     */
-    bitProto.match = function() {
-        return register.apply(this, arguments) === this.m;
     };
 
     /**
@@ -149,6 +91,64 @@
             }
         }
         return result;
+    };
+
+    /**
+     * Bitmask::isset is exactly like Bitmask::all, except it doesn't register new tags in the
+     * global list.
+     *
+     * @param Array|String [, String...] list
+     * @return Boolean
+     */
+    bitProto.isset = function(list) {
+        var valid, i, parts, group, tag;
+
+        list = arrayify.apply(this, arguments);
+        i = list.length;
+        while(i--){
+            parts = split(list[i]);
+            group = parts[0];
+            tag = parts[1];
+            tags[group] = tags[group] || {};
+            valid = has.call(tags[group], tag);
+            if (!valid) {
+                break;
+            }
+        }
+        return valid ? (this.all(list)) : false;
+    };
+
+    /**
+     * Similar to Bitmask::all, except the params must match the bitmask exactly (all set, and
+     * none missing)
+     *
+     * @return Boolean
+     */
+    bitProto.match = function() {
+        return register.apply(this, arguments) === this.m;
+    };
+
+    /**
+     * Sets the Bitmask and returns it.
+     *
+     * Has support for namespacing tags like so: "Number.tag" "Color.red" "Settings.error"
+     *
+     * When using Namespaced tags, it is not possible to check masks against multiple namespaces
+     * at the same time.
+     *
+     * var bm = new Bitmask();
+     * bm.set('A.test');
+     * bm.set('B.test');
+     *
+     *  // wrong - this will give unexpected results
+     * bm.all('A.test', 'B.test');
+     *
+     *
+     * @param String [, String ...]
+     * @return Number
+     */
+    bitProto.set = function() {
+        return this.m = register.apply(this, arguments);
     };
 
     /**
