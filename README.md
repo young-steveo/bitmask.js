@@ -2,6 +2,9 @@
 
 Fast and painless bitmasks for javascript projects.
 
+1. [Development](https://github.com/young-steveo/bitmask.js/blob/0.2/dist/bitmask-0.2.0.js) **v0.2.0**
+2. [Production](https://github.com/young-steveo/bitmask.js/blob/0.2/dist/bitmask-0.2.0.min.js) **v0.2.0**
+
 ## Bitmask Overview
 Bitmasks and bitwise operations are great tools for managing application state or filtering large
 lists of data quickly.  However, applying bitmask logic can be pretty daunting if you've had limited
@@ -67,3 +70,7 @@ var mask = new Bitmask('blue');
 // Notice the key name as the third param.
 var newList = mask.filter(list, 'any', 'tags');
 ```
+
+#### Performance
+Here are some [jsPerf tests](http://jsperf.com/bitmask-js/5) demonstrating Bitmask.js v.s. some
+simple `for` loops.
