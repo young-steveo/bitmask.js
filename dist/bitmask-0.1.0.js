@@ -1,5 +1,5 @@
 /**
- * bitmask v0.1.0 - 2013-02-07
+ * bitmask v0.1.0 - 2013-02-17
  * Quick and painless bitmasks for controlling application state.
  *
  * Copyright (c) 2013 Stephen Young <young.steveo@gmail.com>
@@ -8,7 +8,7 @@
 ;(function(undefined){
     "use strict";
     var Bitmask, tags, indexes, slice, pow, has, register, arrayify, split, filters,
-        objProto, objToString, countBits, bitProto, namespace;
+        objProto, objToString, bitProto, namespace;
 
     indexes = {};
     tags = {};
@@ -69,12 +69,10 @@
      * @param Array|String [, String...] list
      * @return Boolean
      */
-    bitProto.all = function(list) {
-        var count;
-
-        list = arrayify.apply(this, arguments);
-        count = list.length;
-        return countBits.call(this, list) === count;
+    bitProto.all = function() {
+        var m;
+        m = register.apply(this, arrayify.apply(this, arguments));
+        return (m & this.m) === m;
     };
 
     /**
@@ -85,10 +83,10 @@
      * @return Boolean
      */
     bitProto.isset = function(list) {
-        var count, valid, i, parts, group, tag;
+        var valid, i, parts, group, tag;
 
         list = arrayify.apply(this, arguments);
-        i = count = list.length;
+        i = list.length;
         while(i--){
             parts = split(list[i]);
             group = parts[0];
@@ -99,7 +97,7 @@
                 break;
             }
         }
-        return valid ? (countBits.call(this, list) === count) : false;
+        return valid ? (this.all(list)) : false;
     };
 
     /**
@@ -122,7 +120,7 @@
      * @return Boolean
      */
     bitProto.any = function() {
-        return !!countBits.call(this, arrayify.apply(this, arguments));
+        return (register.apply(this, arrayify.apply(this, arguments)) & this.m) > 0;
     };
 
     /**
@@ -138,7 +136,7 @@
      * @return Array
      */
     bitProto.filter = function(bitMasks, method, key) {
-        var i, result, m, single;
+        var i, result, m, single, item;
 
         // set some defaults
         bitMasks = bitMasks || [];
@@ -150,7 +148,8 @@
         method = filters[method];
         while (i--) {
             single = bitMasks[i];
-            if (method(single[key], m)){
+            item = single[key];
+            if (item === m || method(item, m)){
                 result.push(single);
             }
         }
@@ -215,16 +214,6 @@
     };
 
     /**
-     * counts bits after registering any unregistered tags
-     *
-     * @param Array list
-     * @return Number
-     */
-    countBits = function(list) {
-        return (register.apply(this, list) & this.m).toString(2).replace(/0/g, '').length;
-    };
-
-    /**
      * Splits a namespaced string into an array
      *
      * @param  String single
@@ -245,11 +234,11 @@
      */
     filters = {
         all : function(value, mValue) {
-            return value === mValue || ((value & mValue) === mValue);
+            return (value & mValue) === mValue;
         },
 
         any : function(value, mValue) {
-            return value === mValue || ((value & mValue) > 0);
+            return (value & mValue) > 0;
         },
         match : function(value, mValue) {
             return value === mValue;
